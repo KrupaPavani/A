@@ -62,7 +62,7 @@ if uploaded_file is not None:
     # Make prediction
     prediction = model.predict(image_array)
     predicted_class = np.argmax(prediction, axis=1)[0]  # Get the predicted class
-    #confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
+    confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
 
     # Display results
     classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']  # Example classes
