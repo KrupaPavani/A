@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import model_from_json
-import cv2
 
 # Load the model (assuming the model is in the .pkl format)
 def load_model(pkl_path):
