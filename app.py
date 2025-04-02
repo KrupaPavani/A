@@ -29,11 +29,6 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Sidebar
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/White_Blood_Cells_35x_%28cropped%29.jpg/640px-White_Blood_Cells_35x_%28cropped%29.jpg", width=200)
-st.sidebar.title("🩺 Blood Cell Classifier")
-st.sidebar.write("This tool uses **Deep Learning** to classify blood cell types based on an image of the cell.")
-
 # Main Section
 st.title("🩸 Blood Cell Classification")
 st.write("Upload an image of a blood cell to classify its type using a deep learning model.")
