@@ -42,7 +42,7 @@ if uploaded_file is not None:
     st.image(image, caption="🖼 Uploaded Image", use_column_width=True)
 
     # Preprocess the image
-    image = image.resize((224, 224)).convert('RGB')  # Resize and convert to RGB
+    image = image.resize((100, 100)).convert('RGB')  # Resize and convert to RGB
     image_array = np.array(image, dtype=np.float32) / 255.0  # Normalize the image
     image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
 
