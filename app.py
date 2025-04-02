@@ -17,6 +17,14 @@ model = load_model("blood_cells_classification.pkl")
 
 # Streamlit UI
 st.set_page_config(page_title="Blood Cell Classification", page_icon="🩸", layout="wide")
+st.sidebar.title(" An Automated Blood Cell Classification")
+st.sidebar.markdown("---")
+st.sidebar.subheader("📌 About")
+st.sidebar.info(
+    "This app classifies blood cells using a deep learning model. "
+    "Upload a blood cell image, and the model will predict its type."
+)
+
 
 # Custom CSS for styling
 st.markdown("""
