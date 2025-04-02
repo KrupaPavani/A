@@ -65,7 +65,7 @@ if uploaded_file is not None:
     confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
 
     # Display results
-    classes = ['basophil', 'eosinophil', 'erythroblast', 'ig','lymphocyte','monocyte','neutrophil', 'platelet']  # Example classes
+    classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']  # Example classes
     predicted_label = classes[predicted_class]  # Convert the predicted class index to label
     st.success(f"✅ **Predicted Class: {predicted_label}**")
     st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
