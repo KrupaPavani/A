@@ -69,14 +69,14 @@ if uploaded_file is not None:
         # Define blood cell classes
         blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
 
-        # Heuristic: Consider an image a blood cell only if confidence is high
-        if confidence > 0.9 and predicted_class < len(blood_cell_classes):
+        # Threshold for deciding whether an image is a blood cell
+        if confidence < 0.7:
+            st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
+        elif confidence > 0.9 and predicted_class < len(blood_cell_classes):
             predicted_label = blood_cell_classes[predicted_class]
             st.success(f"✅ **Predicted Class: {predicted_label}**")
             st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
-        elif confidence < 0.9 and predicted_class < len(blood_cell_classes):
-            st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
         else:
-            st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
+            st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
     except ValueError as e:
         st.error(f"🚨 Model input error: {str(e)}. Please ensure the uploaded image is valid.")
