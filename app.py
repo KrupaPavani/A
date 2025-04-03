@@ -63,20 +63,21 @@ if uploaded_file is not None:
     # Make prediction
     try:
         prediction = model.predict(image_array)
-        confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
         predicted_class = np.argmax(prediction, axis=1)[0]  # Get the predicted class
+        confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
 
         # Define blood cell classes
         blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
 
-        # Threshold for deciding whether an image is a blood cell
-        if confidence < 0.7:
+        # Verify if predicted class belongs to blood cell categories
+        if predicted_class >= len(blood_cell_classes):
             st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
-        elif confidence > 0.9 and predicted_class < len(blood_cell_classes):
-            predicted_label = blood_cell_classes[predicted_class]
-            st.success(f"✅ **Predicted Class: {predicted_label}**")
-            st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
         else:
-            st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
+            if confidence > 0.9:
+                predicted_label = blood_cell_classes[predicted_class]
+                st.success(f"✅ **Predicted Class: {predicted_label}**")
+                st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
+            else:
+                st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
     except ValueError as e:
         st.error(f"🚨 Model input error: {str(e)}. Please ensure the uploaded image is valid.")
