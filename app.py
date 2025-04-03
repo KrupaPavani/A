@@ -2,7 +2,6 @@ import streamlit as st
 import pickle
 import numpy as np
 from PIL import Image
-import cv2
 from tensorflow.keras.models import model_from_json
 
 # Function to load the model
