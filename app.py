@@ -45,7 +45,7 @@ uploaded_file = st.file_uploader("📤 Upload an Image", type=["jpg", "png", "jp
 if uploaded_file is not None:
     # Display the uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption="🖼 Uploaded Image", use_column_width=False, width=300)
+    st.image(image, caption="🖼 Uploaded Image", use_container_width=True, width=300)
 
     # Preprocess the image
     image = image.resize((224, 224)).convert('RGB')  # Resize to model's expected input size
@@ -69,12 +69,12 @@ if uploaded_file is not None:
         # Define blood cell classes
         blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
 
-        # Check if the predicted class belongs to blood cells and confidence is high enough
-        if confidence > 0.7 and predicted_class < len(blood_cell_classes):
+        # Heuristic: Consider an image a blood cell only if confidence is high
+        if confidence > 0.9 and predicted_class < len(blood_cell_classes):
             predicted_label = blood_cell_classes[predicted_class]
             st.success(f"✅ **Predicted Class: {predicted_label}**")
             st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
-        elif predicted_class < len(blood_cell_classes):
+        elif confidence < 0.9 and predicted_class < len(blood_cell_classes):
             st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
         else:
             st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
