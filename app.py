@@ -22,7 +22,7 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("📌 About")
 st.sidebar.info(
     "This app classifies blood cells using a deep learning model. "
-    "Upload a blood cell image, and the model will predict its type.")
+    "Upload a blood cell image, and the model will predict its type."")
 
 # Custom CSS for styling
 st.markdown("""
@@ -30,7 +30,7 @@ st.markdown("""
     .main {background-color: #f0f0f0;}
     .stButton>button {background-color: #4CAF50; color: white; border-radius: 8px;}
     .stSelectbox {color: black;}
-    .stImage {border-radius: 10px;}
+    .stImage {border-radius: 10px; max-width: 300px;}
     .stProgress > div > div {background-color: #4CAF50;}
     </style>
     """, unsafe_allow_html=True)
@@ -45,10 +45,10 @@ uploaded_file = st.file_uploader("📤 Upload an Image", type=["jpg", "png", "jp
 if uploaded_file is not None:
     # Display the uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption="🖼 Uploaded Image", use_column_width=True)
+    st.image(image, caption="🖼 Uploaded Image", use_column_width=False, width=300)
 
     # Preprocess the image
-    image = image.resize((224, 224)).convert('RGB')  # Resize and convert to RGB
+    image = image.resize((128, 128)).convert('RGB')  # Resize to smaller size and convert to RGB
     image_array = np.array(image, dtype=np.float32) / 255.0  # Normalize the image
     image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
 
@@ -69,4 +69,4 @@ if uploaded_file is not None:
         st.success(f"✅ **Predicted Class: {predicted_label}**")
         st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
     else:
-        st.error("❌ The image is not acceptable for identification. Please upload a clearer image.")
+        st.error("❌ The image is not acceptable for identification. Please upload a correct image.")
