@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import numpy as np
 from PIL import Image
+import cv2
 from tensorflow.keras.models import model_from_json
 
 # Function to load the model
@@ -32,11 +33,12 @@ uploaded_file = st.file_uploader("📤 Upload an Image", type=["jpg", "png", "jp
 # Function to detect purple stain (typically used in blood cell slides)
 def detect_purple_stain(image):
     # Convert image to OpenCV format
-    image_cv = np.array(image.convert('RGB'))
+    image_cv = np.array(image.convert('RGB'))[:, :, :3]  # Ensure 3 channels (RGB)
+    
     hsv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2HSV)
 
     # Define purple color range in HSV
-    lower_purple = np.array([120, 40, 40])  # Adjusted for blood cell stains
+    lower_purple = np.array([120, 40, 40])  
     upper_purple = np.array([160, 255, 255])
 
     # Create a mask for purple
@@ -46,11 +48,11 @@ def detect_purple_stain(image):
     return purple_ratio > 0.1  # If >10% of the image is purple, assume it's a blood cell slide
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert('RGB')  # Convert here to avoid issues
     st.image(image, caption="🖼 Uploaded Image", use_container_width=True)
 
     # Preprocess the image
-    image = image.resize((224, 224)).convert('RGB')
+    image = image.resize((224, 224))
     image_array = np.array(image, dtype=np.float32) / 255.0
     image_array = np.expand_dims(image_array, axis=0)
 
@@ -68,8 +70,8 @@ if uploaded_file is not None:
     blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
 
     # **Check if it's a blood cell**
-    is_purple_stain = detect_purple_stain(Image.open(uploaded_file))
-    prediction_variance = np.std(prediction)  # Check if model is confused (low variance)
+    is_purple_stain = detect_purple_stain(image)
+    prediction_variance = np.std(prediction)  
 
     if not is_purple_stain and prediction_variance < 0.05:
         st.error("❌ Not a blood cell image. Please upload a valid blood cell image.")
