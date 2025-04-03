@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import model_from_json
+import colorsys
 
 # Load the model
 def load_model(pkl_path):
@@ -15,19 +16,24 @@ def load_model(pkl_path):
 # Load blood cell classification model
 model = load_model("blood_cells_classification.pkl")
 
-# Function to detect purple-stained regions
+# Function to detect purple-stained regions using HSV
 def detect_purple_stain(image):
     image_np = np.array(image)
+    h, w, _ = image_np.shape
     
-    # Extract RGB channels
-    red, green, blue = image_np[:,:,0], image_np[:,:,1], image_np[:,:,2]
+    # Convert each pixel from RGB to HSV
+    hsv_pixels = np.array([colorsys.rgb_to_hsv(r/255.0, g/255.0, b/255.0) for r, g, b in image_np.reshape(-1, 3)])
     
-    # Condition: High Red & Blue, Low Green → Purple Stain
-    purple_mask = (red > 100) & (blue > 100) & (green < 80)
+    # Extract H (hue), S (saturation), and V (value) channels
+    hue, saturation, value = hsv_pixels[:, 0], hsv_pixels[:, 1], hsv_pixels[:, 2]
     
-    # If >10% of the image contains purple pixels, classify it as a blood cell image
-    purple_ratio = np.sum(purple_mask) / purple_mask.size
-    return purple_ratio > 0.1  # Adjust threshold as needed
+    # Define a flexible purple range in HSV
+    purple_mask = ((hue >= 0.6) & (hue <= 0.75)) & (saturation > 0.2) & (value > 0.2)
+    
+    # Check the proportion of purple pixels in the image
+    purple_ratio = np.sum(purple_mask) / len(hue)
+    
+    return purple_ratio > 0.05  # Accept if at least 5% of the image has purple stains
 
 # Streamlit UI
 st.set_page_config(page_title="Blood Cell Classification", page_icon="🩸", layout="wide")
