@@ -22,9 +22,7 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("📌 About")
 st.sidebar.info(
     "This app classifies blood cells using a deep learning model. "
-    "Upload a blood cell image, and the model will predict its type."
-)
-
+    "Upload a blood cell image, and the model will predict its type."")
 
 # Custom CSS for styling
 st.markdown("""
@@ -64,15 +62,11 @@ if uploaded_file is not None:
     predicted_class = np.argmax(prediction, axis=1)[0]  # Get the predicted class
     confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
 
-    # Display results
-    classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']  # Example classes
-    predicted_label = classes[predicted_class]  # Convert the predicted class index to label
-    st.success(f"✅ **Predicted Class: {predicted_label}**")
-    st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
-
-    # Extra message based on confidence
-    if confidence > 0.8:
-        st.info(f"✅ The prediction is quite confident. The cell is classified as **{predicted_label}**.")
+    # Display results only if confidence is greater than 90%
+    if confidence > 0.9:
+        classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']  # Example classes
+        predicted_label = classes[predicted_class]  # Convert the predicted class index to label
+        st.success(f"✅ **Predicted Class: {predicted_label}**")
+        st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
     else:
-        st.warning("⚠️ The model is less confident in this prediction. Please consult a specialist for confirmation.")
-
+        st.error("❌ The image is not acceptable for identification. Please upload a clearer image.")
