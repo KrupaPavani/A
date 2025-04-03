@@ -66,13 +66,18 @@ if uploaded_file is not None:
         predicted_class = np.argmax(prediction, axis=1)[0]  # Get the predicted class
         confidence = np.max(prediction, axis=1)[0]  # Get the confidence level
 
-        # Display results only if confidence is greater than 90%
-        if confidence > 0.9:
-            classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']  # Example classes
-            predicted_label = classes[predicted_class]  # Convert the predicted class index to label
-            st.success(f"✅ **Predicted Class: {predicted_label}**")
-            st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
+        # Define blood cell classes
+        blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
+        
+        # Check if the predicted class is a blood cell
+        if predicted_class < len(blood_cell_classes):
+            predicted_label = blood_cell_classes[predicted_class]  # Convert the predicted class index to label
+            if confidence > 0.9:
+                st.success(f"✅ **Predicted Class: {predicted_label}**")
+                st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
+            else:
+                st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
         else:
-            st.error("❌ The image is not acceptable for identification. Please upload valid image.")
+            st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
     except ValueError as e:
         st.error(f"🚨 Model input error: {str(e)}. Please ensure the uploaded image is valid.")
