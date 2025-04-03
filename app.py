@@ -72,7 +72,7 @@ if uploaded_file is not None:
         # Check if the predicted class is a blood cell
         if predicted_class < len(blood_cell_classes):
             predicted_label = blood_cell_classes[predicted_class]  # Convert the predicted class index to label
-            if confidence > 0.9:
+            if confidence > 0.7:
                 st.success(f"✅ **Predicted Class: {predicted_label}**")
                 st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
             else:
