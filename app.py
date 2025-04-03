@@ -76,7 +76,7 @@ if uploaded_file is not None:
                 st.success(f"✅ **Predicted Class: {predicted_label}**")
                 st.write(f"🧪 **Confidence Score:** `{confidence:.4f}`")
             else:
-                st.warning("⚠️ Please provide a clearer image to identify the blood cell type.")
+                st.warning("⚠️ Please provide a valid image to identify the blood cell type.")
         else:
             st.error("❌ Not a blood cell image. Please provide a valid blood cell image.")
     except ValueError as e:
