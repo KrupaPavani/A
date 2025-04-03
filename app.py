@@ -22,7 +22,7 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("📌 About")
 st.sidebar.info(
     "This app classifies blood cells using a deep learning model. "
-    "Upload a blood cell image, and the model will predict its type."")
+    "Upload a blood cell image, and the model will predict its type.")
 
 # Custom CSS for styling
 st.markdown("""
