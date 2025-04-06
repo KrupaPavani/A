@@ -52,12 +52,13 @@ if uploaded_file is not None:
     if not detect_purple_stain(image):
         st.error("❌ Not a blood cell image. Please upload a valid blood cell image.")
     else:
-        # Resize to 128x128 (instead of 224x224)
-        image = image.resize((128, 128)).convert('RGB')
+        # Dynamically get input size from model and resize
+        _, height, width, channels = model.input_shape
+        image = image.resize((width, height)).convert('RGB')
         image_array = np.array(image, dtype=np.float32) / 255.0
         image_array = np.expand_dims(image_array, axis=0)
 
-        # Simulate progress
+        # Simulate progress bar
         progress_bar = st.progress(0)
         for percent_complete in range(100):
             time.sleep(0.005)
@@ -68,8 +69,11 @@ if uploaded_file is not None:
         predicted_class = np.argmax(prediction, axis=1)[0]
         confidence = np.max(prediction, axis=1)[0]
 
-        blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil', 'eosinophil', 'ig', 'neutrophil', 'erythroblast']
+        # Class labels
+        blood_cell_classes = ['monocyte', 'platelet', 'lymphocyte', 'basophil',
+                              'eosinophil', 'ig', 'neutrophil', 'erythroblast']
 
+        # Show result
         if confidence > 0.9:
             predicted_label = blood_cell_classes[predicted_class]
             st.success(f"✅ **Predicted Class: {predicted_label}**")
